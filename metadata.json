@@ -1,0 +1,6 @@
+{
+  "name": "@mnésia_Lab's APPs & Force Safe ioT Mobile Security",
+  "description": "Central de controle para o plano de micro-incubadora @mnésia_Lab's APPs & Force Safe ioT Mobile Security. Inclui simuladores de Serviços, produto SaaS IoT + IA, calendário de conteúdo, plano estratégico detalhado e assistente Gemini integrado.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
