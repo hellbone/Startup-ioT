@@ -8,7 +8,6 @@ import Roadmap90Days from "./components/Roadmap90Days";
 import GeminiChat from "./components/GeminiChat";
 import StrategicPlan from "./components/StrategicPlan";
 import SplashScreen from "./components/SplashScreen";
-import VulnerabilityRadar from "./components/VulnerabilityRadar";
 import PasswordGate from "./components/PasswordGate";
 import ClientAssistant from "./components/ClientAssistant";
 import { 
@@ -440,9 +439,6 @@ export default function App() {
               </div>
 
             </div>
-
-            {/* Interactive Cybersecurity Vulnerability Radar Analysis */}
-            <VulnerabilityRadar />
 
             {/* Architecture Details Infographics Block */}
             <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6">
