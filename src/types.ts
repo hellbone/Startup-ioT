@@ -58,3 +58,16 @@ export interface ChatMessage {
   content: string;
   timestamp: string;
 }
+
+export interface Project3D {
+  id: string;
+  projectName: string;
+  material: string;
+  estimatedCost: number;
+  sellingPrice: number;
+  quantity: number;
+  clientName?: string;
+  status: "planejado" | "imprimindo" | "concluido" | "entregue";
+  notes?: string;
+}
+

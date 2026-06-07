@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Cpu, TrendingUp, DollarSign, Award, Clock } from "lucide-react";
+import { Cpu, TrendingUp, DollarSign, Award, Clock, LockKeyhole, ShieldCheck, KeyRound, X } from "lucide-react";
 
 interface HeaderProps {
   activeSection: string;
@@ -17,6 +17,10 @@ export default function Header({
   contentLeadsValue 
 }: HeaderProps) {
   const [timeStr, setTimeStr] = useState("");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [currentPassword, setCurrentPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [feedback, setFeedback] = useState("");
 
   useEffect(() => {
     const updateTime = () => {
@@ -27,6 +31,29 @@ export default function Header({
     const interval = setInterval(updateTime, 1000);
     return () => clearInterval(interval);
   }, []);
+
+  // Sync current active password from localStorage on open
+  useEffect(() => {
+    if (isModalOpen) {
+      const active = localStorage.getItem("mnesia_gate_password") || "panico";
+      setCurrentPassword(active);
+      setNewPassword(active);
+      setFeedback("");
+    }
+  }, [isModalOpen]);
+
+  const handleSavePassword = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newPassword.trim()) {
+      setFeedback("A senha não pode estar em branco.");
+      return;
+    }
+    localStorage.setItem("mnesia_gate_password", newPassword.trim());
+    setFeedback("✓ Chave atualizada com sucesso!");
+    setTimeout(() => {
+      setIsModalOpen(false);
+    }, 1200);
+  };
 
   const serviceGoalPercent = Math.min(100, (activeContractsValue / 4000) * 100);
   const saasGoalPercent = Math.min(100, (saasClientCount / 100) * 100);
@@ -91,6 +118,18 @@ export default function Header({
             <Clock size={14} className="text-slate-400" />
             <span className="font-mono">{timeStr || "Carregando..."}</span>
           </div>
+
+          {/* Master Password Configuration Gear */}
+          <button
+            type="button"
+            id="btn-trigger-change-password-modal"
+            onClick={() => setIsModalOpen(true)}
+            className="flex items-center gap-1.5 bg-slate-950/60 hover:bg-slate-950 border border-slate-800 hover:border-rose-500/30 text-rose-300 hover:text-rose-200 rounded-lg p-2 text-xs transition-all cursor-pointer font-sans"
+            title="Alterar Senha do Gate Principal"
+          >
+            <LockKeyhole size={14} className="text-rose-500 animate-pulse" />
+            <span className="font-medium">Chave Lock</span>
+          </button>
         </div>
       </div>
 
@@ -147,6 +186,16 @@ export default function Header({
           Pilar 3: Roteiros & Vídeos
         </button>
         <button
+          onClick={() => setActiveSection("3d")}
+          className={`px-4 py-2 text-xs font-semibold rounded-lg transition-all cursor-pointer ${
+            activeSection === "3d"
+              ? "bg-cyan-600/10 text-cyan-400 border border-cyan-500/20 shadow-sm"
+              : "text-slate-400 hover:text-cyan-400 hover:bg-slate-800/30"
+          }`}
+        >
+          Pilar 4: 3D & Protopagem
+        </button>
+        <button
           onClick={() => setActiveSection("roadmap")}
           className={`px-4 py-2 text-xs font-semibold rounded-lg transition-all cursor-pointer ${
             activeSection === "roadmap"
@@ -157,6 +206,88 @@ export default function Header({
           Plano 90 Dias
         </button>
       </div>
+
+      {/* Password Changer Modal Overlay Dialog */}
+      {isModalOpen && (
+        <div id="password-change-modal-overlay" className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[999] flex items-center justify-center p-4">
+          <div className="bg-slate-900 border border-slate-800 rounded-2xl max-w-sm w-full p-6 space-y-4 shadow-2xl relative text-left">
+            <button
+              type="button"
+              onClick={() => setIsModalOpen(false)}
+              className="absolute right-4 top-4 text-slate-400 hover:text-white transition-colors cursor-pointer"
+            >
+              <X size={18} />
+            </button>
+
+            <div className="flex items-center gap-2 pb-2 border-b border-slate-800">
+              <span className="p-1 bg-rose-500/10 text-rose-400 border border-rose-500/20 rounded">
+                <LockKeyhole size={15} />
+              </span>
+              <h3 className="font-display font-bold text-white text-sm">Configuração de Segurança Gate</h3>
+            </div>
+
+            <form onSubmit={handleSavePassword} className="space-y-4">
+              <div className="space-y-1">
+                <label className="text-[10px] font-mono uppercase font-bold text-slate-400 block">
+                  Chave Instalada em Cache:
+                </label>
+                <div className="bg-slate-950 rounded-lg px-3 py-1.5 border border-slate-900 text-xs font-mono text-slate-500 select-all truncate">
+                  {currentPassword}
+                </div>
+              </div>
+
+              <div className="space-y-1">
+                <label className="text-[10px] font-mono uppercase font-bold text-slate-400 block">
+                  Nova Senha Master:
+                </label>
+                <div className="relative">
+                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500">
+                    <KeyRound size={13} />
+                  </span>
+                  <input
+                    type="text"
+                    required
+                    placeholder="Digite a nova senha..."
+                    value={newPassword}
+                    onChange={(e) => {
+                      setNewPassword(e.target.value);
+                      if (feedback) setFeedback("");
+                    }}
+                    className="w-full bg-slate-950 border border-slate-850 rounded-lg pl-8 pr-3 py-2 text-xs text-white placeholder-slate-650 focus:outline-none focus:border-rose-500/50"
+                  />
+                </div>
+              </div>
+
+              {feedback && (
+                <div className={`p-2 rounded text-[10px] font-mono ${
+                  feedback.startsWith("✓") 
+                    ? "bg-emerald-500/10 border border-emerald-500/20 text-emerald-400" 
+                    : "bg-rose-500/10 border border-rose-500/20 text-rose-400"
+                }`}>
+                  {feedback}
+                </div>
+              )}
+
+              <div className="flex gap-2 pt-2">
+                <button
+                  type="button"
+                  onClick={() => setIsModalOpen(false)}
+                  className="flex-1 py-2 text-center text-[11px] font-bold uppercase tracking-wider bg-slate-950 hover:bg-slate-900 border border-slate-800 text-slate-400 hover:text-white rounded-lg transition-colors cursor-pointer"
+                >
+                  Cancelar
+                </button>
+                <button
+                  type="submit"
+                  id="btn-confirmar-nova-senha"
+                  className="flex-1 py-2 text-center text-[11px] font-bold uppercase tracking-wider bg-gradient-to-r from-rose-500 to-rose-600 hover:from-rose-400 hover:to-rose-500 text-white rounded-lg shadow-lg shadow-rose-500/15 cursor-pointer"
+                >
+                  Salvar Nova Chave
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </header>
   );
 }

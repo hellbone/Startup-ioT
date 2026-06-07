@@ -3,11 +3,14 @@ import Header from "./components/Header";
 import PillarServices from "./components/PillarServices";
 import PillarSaaS from "./components/PillarSaaS";
 import PillarContent from "./components/PillarContent";
+import Pillar3D from "./components/Pillar3D";
 import Roadmap90Days from "./components/Roadmap90Days";
 import GeminiChat from "./components/GeminiChat";
 import StrategicPlan from "./components/StrategicPlan";
 import SplashScreen from "./components/SplashScreen";
 import VulnerabilityRadar from "./components/VulnerabilityRadar";
+import PasswordGate from "./components/PasswordGate";
+import ClientAssistant from "./components/ClientAssistant";
 import { 
   ClientContract, 
   ContentIdea, 
@@ -27,11 +30,13 @@ import {
   ArrowRight,
   Target,
   FileCode,
-  Smartphone
+  Smartphone,
+  Printer
 } from "lucide-react";
 
 export default function App() {
   const [showSplash, setShowSplash] = useState(true);
+  const [isLocked, setIsLocked] = useState(true);
   const [activeSection, setActiveSection] = useState<string>("dashboard");
 
   // State with LocalStorage fallbacks or default realistic sandbox data
@@ -198,6 +203,10 @@ export default function App() {
     return <SplashScreen onComplete={() => setShowSplash(false)} />;
   }
 
+  if (isLocked) {
+    return <PasswordGate onUnlock={() => setIsLocked(false)} />;
+  }
+
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 font-sans flex flex-col justify-between selection:bg-blue-500 selection:text-white">
       
@@ -249,7 +258,7 @@ export default function App() {
             </div>
 
             {/* Pillar Bento Block Summary Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
               
               {/* Pillar 1 Container Summary */}
               <div className="bg-slate-900 border border-slate-800 rounded-2xl p-5 hover:border-blue-500/25 transition-all flex flex-col justify-between space-y-4">
@@ -331,6 +340,34 @@ export default function App() {
                     className="text-[10px] text-purple-400 hover:text-purple-300 font-semibold cursor-pointer flex items-center gap-1 transition-all"
                   >
                     Ver Linha Editorial <ArrowRight size={12} />
+                  </button>
+                </div>
+              </div>
+
+              {/* Pillar 4 Container Summary */}
+              <div className="bg-slate-900 border border-slate-800 rounded-2xl p-5 hover:border-cyan-500/25 transition-all flex flex-col justify-between space-y-4">
+                <div>
+                  <div className="flex justify-between items-start">
+                    <span className="bg-cyan-500/10 text-cyan-400 text-[10px] uppercase font-bold tracking-widest px-2.5 py-0.5 rounded-md border border-[#06b6d4]/10 font-mono">
+                      Pilar 4
+                    </span>
+                    <Printer size={16} className="text-cyan-400" />
+                  </div>
+                  <h3 className="font-display font-bold text-white text-md mt-3">Prototipagem & 3D B2B</h3>
+                  <p className="text-slate-400 text-xs mt-1 leading-snug">
+                    Cases físicos customizados de ESP32 e peças de reposição rápidas de altíssima margem de engenharia.
+                  </p>
+                </div>
+                <div className="bg-slate-950 p-3 rounded-xl border border-slate-850 flex items-center justify-between">
+                  <div>
+                    <span className="text-[9px] text-slate-500 font-bold uppercase block">Investimento Inicial</span>
+                    <span className="text-sm font-bold text-white font-mono">1 Impressora B2B</span>
+                  </div>
+                  <button 
+                    onClick={() => setActiveSection("3d")}
+                    className="text-[10px] text-cyan-400 hover:text-cyan-300 font-semibold cursor-pointer flex items-center gap-1 transition-all"
+                  >
+                    Gerenciar Projetos <ArrowRight size={12} />
                   </button>
                 </div>
               </div>
@@ -482,6 +519,11 @@ export default function App() {
           <PillarContent ideas={ideas} setIdeas={setIdeas} />
         )}
 
+        {/* Section Pillar 4 - B2B 3D Printing & Prototyping */}
+        {activeSection === "3d" && (
+          <Pillar3D />
+        )}
+
         {/* Section Roadmap 90 days */}
         {activeSection === "roadmap" && (
           <Roadmap90Days tasks={tasks} setTasks={setTasks} />
@@ -502,6 +544,9 @@ export default function App() {
           </div>
         </div>
       </footer>
+
+      {/* Interactive AI Presentation Assistant */}
+      <ClientAssistant />
 
     </div>
   );

@@ -25,7 +25,8 @@ import {
   DollarSign,
   Plus,
   Trash2,
-  Info
+  Info,
+  Printer
 } from "lucide-react";
 
 interface CostItem {
@@ -132,6 +133,15 @@ export default function StrategicPlan() {
         type: "mensal",
         enabled: true,
         description: "Subsistência do programador para dedicação integral exclusiva à arquitetura @mnésia_Lab's."
+      },
+      {
+        id: "3d-printer",
+        name: "Impressora 3D B2B (Bambu Lab A1 / Creality Ender-3 V3)",
+        category: "Hardware",
+        cost: 2300,
+        type: "unico",
+        enabled: false,
+        description: "Equipamento físico de precisão para produção de cases de ESP32, sensores e peças de reposição rápida."
       }
     ];
   });
@@ -187,7 +197,8 @@ export default function StrategicPlan() {
     setCosts(prev => prev.filter(c => c.id !== id));
   };
 
-  // Calculations
+  const printerCostItem = costs.find(c => c.id === "3d-printer");
+  const printerEnabled = printerCostItem ? printerCostItem.enabled : false;
   const activeCosts = costs.filter(c => c.enabled);
   const totalSingleUpfront = activeCosts
     .filter(c => c.type === "unico" || c.type === "anual")
@@ -211,6 +222,7 @@ export default function StrategicPlan() {
       case "inteligência": return <Bot size={14} className="text-fuchsia-400" />;
       case "publicação": return <PlaySquare size={14} className="text-rose-400" />;
       case "fundador": return <UserCheck size={14} className="text-yellow-400" />;
+      case "hardware": return <Printer size={14} className="text-cyan-400" />;
       default: return <Cpu size={14} className="text-slate-400" />;
     }
   };
@@ -499,6 +511,9 @@ export default function StrategicPlan() {
             <span className="bg-slate-950 border border-slate-850 p-2.5 rounded-lg flex items-center gap-2 text-slate-300">
               <span className="w-1.5 h-1.5 bg-fuchsia-400 rounded-full"></span> Inteligência Artificial
             </span>
+            <span className="bg-slate-950 border border-slate-850 p-2.5 rounded-lg flex items-center gap-2 text-slate-300">
+              <span className="w-1.5 h-1.5 bg-cyan-400 rounded-full"></span> Modelagem & Impressão 3D B2B
+            </span>
             <span className="bg-slate-950 border border-slate-850 p-2.5 rounded-lg flex items-center gap-2 text-slate-300 sm:col-span-2">
               <span className="w-1.5 h-1.5 bg-red-400 rounded-full"></span> Criação de Conteúdo Digital de Alto Lead
             </span>
@@ -538,14 +553,14 @@ export default function StrategicPlan() {
 
       </div>
 
-      {/* The 3 Pillars Deep Dive */}
+      {/* The 4 Pillars Deep Dive */}
       <div className="space-y-4">
         <h3 className="text-base font-bold text-slate-200 tracking-wider uppercase border-b border-slate-800 pb-2 flex items-center gap-2 font-display">
           <Layers size={18} className="text-blue-400" />
-          A Estrutura de Três Pilares da @mnésia_Lab's
+          A Estrutura de Quatro Pilares da @mnésia_Lab's
         </h3>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 font-sans">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 font-sans">
           
           {/* Pillar 1 Detail */}
           <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 flex flex-col justify-between space-y-4 hover:border-blue-500/20 transition-all">
@@ -640,6 +655,39 @@ export default function StrategicPlan() {
             </div>
           </div>
 
+          {/* Pillar 4 Detail */}
+          <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 flex flex-col justify-between space-y-4 hover:border-cyan-500/20 transition-all">
+            <div className="space-y-3">
+              <div className="flex justify-between items-center">
+                <span className="text-[9px] bg-cyan-500/15 text-cyan-400 border border-cyan-500/20 px-2.5 py-1 rounded-md font-bold uppercase font-mono">
+                  Pilar 4 - Manufatura Premium
+                </span>
+                <span className="text-xs font-bold text-slate-400">Alta Margem 3D</span>
+              </div>
+              <h4 className="text-base font-bold text-white font-display">Soluções 3D & Protopagem</h4>
+              <p className="text-xs text-slate-400 leading-relaxed font-sans">
+                Venda de soluções físicas completas de alto valor agregado (cases sob medida, invólucros de sensores e peças industriais) ao invés de miniaturas baratas. Viável com 1 impressora!
+              </p>
+
+              <div className="space-y-1.5 text-xs font-sans">
+                <span className="text-slate-300 font-semibold block">O que focar:</span>
+                <ul className="space-y-1 text-[11px] text-slate-400 list-inside list-disc">
+                  <li>Caixas customizadas de ESP32 para agronegócio</li>
+                  <li>Peças plásticas e presilhas de reposição difíceis</li>
+                  <li>Prototipagem rápida sob demanda para empresas</li>
+                  <li>Solução de design de produto embarcado robusto</li>
+                </ul>
+              </div>
+            </div>
+
+            <div className="bg-slate-950 p-3 rounded-xl border border-slate-850 text-left font-mono">
+              <span className="text-[9px] text-slate-500 uppercase block">1 Impressora Inicial</span>
+              <span className="text-[10px] font-bold text-cyan-400 flex items-center gap-1">
+                <Printer size={12} /> Bambu Lab A1 / Ender-3 V3
+              </span>
+            </div>
+          </div>
+
         </div>
       </div>
 
@@ -677,6 +725,96 @@ export default function StrategicPlan() {
               <span className="text-purple-400 font-mono">Gemini 1.5</span>
             </div>
           </div>
+        </div>
+      </div>
+
+      {/* 3D Printing Strategic Viability Analysis */}
+      <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-6 relative overflow-hidden">
+        <div className="absolute top-0 right-0 bg-cyan-500/5 w-64 h-64 rounded-full blur-3xl pointer-events-none"></div>
+        <div className="flex items-center gap-2 border-b border-slate-800 pb-3">
+          <Printer className="text-cyan-400" size={18} />
+          <h3 className="text-sm font-bold uppercase tracking-wider text-slate-200 font-display">Viabilidade de Impressão 3D B2B com Uma Só Impressora</h3>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 font-sans">
+          
+          <div className="lg:col-span-8 space-y-4 text-left">
+            <p className="text-xs text-slate-300 leading-relaxed font-sans">
+              <strong>Sim, é absolutamente viável</strong> — mas exige mudar completamente a forma tradicional de enxergar o negócio. Em vez de disputar leilões de preços vendendo colecionáveis ou decoração genérica na internet, o caminho lucrativo é vender <strong className="text-white">soluções físicas integradas de alto valor agregado</strong>, focado exclusivamente no setor corporativo (B2B):
+            </p>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="bg-slate-950 p-4 border border-slate-850 rounded-xl space-y-2">
+                <span className="text-[9px] uppercase tracking-wider font-bold bg-cyan-500/10 text-cyan-300 px-2 py-0.5 rounded font-mono border border-cyan-500/20">
+                  Oportunidade 1
+                </span>
+                <h4 className="text-xs font-bold text-white uppercase font-display">Prototipagem de Eletrônica & IoT</h4>
+                <p className="text-[11px] text-slate-400 leading-relaxed">
+                  Desenvolver gabinetes customizados para ESP32, cases de trilho DIN, suportes para GPS e invólucros para rastreadores de frotas. Uma caixa que consome R$ 5 de material pode ser vendida de R$ 50 a R$ 200 dependendo da aplicação do cliente (makers, empresas de automação e integradores).
+                </p>
+              </div>
+
+              <div className="bg-slate-950 p-4 border border-slate-850 rounded-xl space-y-2">
+                <span className="text-[9px] uppercase tracking-wider font-bold bg-cyan-500/10 text-cyan-300 px-2 py-0.5 rounded font-mono border border-cyan-500/20">
+                  Oportunidade 2
+                </span>
+                <h4 className="text-xs font-bold text-white uppercase font-display">Peças de Reposição Críticas</h4>
+                <p className="text-[11px] text-slate-400 leading-relaxed">
+                  Existe um mercado gigante de engrenagens, travas, presilhas e tampas que param linhas de produção inteiras de empresas quando quebram. Você projeta em CAD gratuito (Fusion 360), imprime com filamentos industriais (PETG/ASA) e resolve o problema rapidamente por alto ticket.
+                </p>
+              </div>
+
+              <div className="bg-slate-950 p-4 border border-slate-850 rounded-xl space-y-2">
+                <span className="text-[9px] uppercase tracking-wider font-bold bg-cyan-500/10 text-cyan-300 px-2 py-0.5 rounded font-mono border border-cyan-500/20">
+                  Oportunidade 3
+                </span>
+                <h4 className="text-xs font-bold text-white uppercase font-display">Produtos Completos Próprios</h4>
+                <p className="text-[11px] text-slate-400 leading-relaxed">
+                  Unir seu domínio técnico de circuito, firmware e software (ESP32 + web) com as caixas produzidas sob medida na impressora. O rastreador ou sensor B2B é entregue pronto e selado na caixa, tornando a impressora uma "micro-fábrica digital" própria sem depender de estoque externo.
+                </p>
+              </div>
+
+              <div className="bg-slate-950 p-4 border border-slate-850 rounded-xl space-y-2">
+                <span className="text-[9px] uppercase tracking-wider font-bold bg-cyan-500/10 text-cyan-300 px-2 py-0.5 rounded font-mono border border-cyan-500/20">
+                  Oportunidade 4
+                </span>
+                <h4 className="text-xs font-bold text-white uppercase font-display">Gabaritos de Montagem Industrial</h4>
+                <p className="text-[11px] text-slate-400 leading-relaxed">
+                  Pequenas indústrias e oficinas precisam de gabaritos físicos e ferramentas auxiliares que agilizam a produção de operários. Você cria ferramentas exclusivas sob demanda e otimiza a eficiência de um cliente de alto padrão.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div className="lg:col-span-4 bg-slate-950 border border-slate-850 p-5 rounded-2xl flex flex-col justify-between space-y-6 text-left">
+            <div className="space-y-4">
+              <span className="text-[9px] uppercase tracking-widest font-bold bg-red-500/10 text-red-400 px-2.5 py-1 rounded border border-red-500/20 font-mono inline-block">
+                O QUE VOCÊ DEVE EVITAR
+              </span>
+              <ul className="text-[11px] text-slate-400 space-y-2.5">
+                <li className="flex items-start gap-2">
+                  <span className="text-red-400 font-bold font-sans">❌</span> 
+                  <span><strong>Bonecos de Anime & Decorativos:</strong> Guerra de preço infinita e concorrência baseada em centavos em marketplaces.</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-red-400 font-bold font-sans">❌</span> 
+                  <span><strong>Chaveiros & Brindes Baratos:</strong> Exige fazendas com dezenas de impressoras trabalhando simultaneamente para ganhar na escala.</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-red-400 font-bold font-sans">❌</span> 
+                  <span><strong>Artesanatos Genéricos:</strong> Margem de lucro extremamente espremida e alto custo logístico e de publicidade.</span>
+                </li>
+              </ul>
+            </div>
+
+            <div className="bg-slate-900 border border-slate-850 p-4 rounded-xl text-xs space-y-2 font-sans">
+              <span className="font-bold text-slate-200 block">Modelo de Investimento Enxuto</span>
+              <p className="text-[11px] text-slate-400 leading-relaxed">
+                Começar com <strong>1 única impressora moderna e confiável</strong> (Bambu Lab A1, Creality Ender-3 V3 SE ou Elegoo Neptune 4) + Filamentos PLA e PETG resistentes. O investimento total inicial gira em torno de R$ 1.500 a R$ 2.500, operando de forma lucrativa e validando o mercado antes de partir para a segunda máquina.
+              </p>
+            </div>
+          </div>
+
         </div>
       </div>
 
