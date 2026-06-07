@@ -18,7 +18,7 @@ export default function GeminiChat() {
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const [errorText, setErrorText] = useState("");
-  const messagesEndRef = useRef<HTMLDivElement>(null);
+  const chatContainerRef = useRef<HTMLDivElement>(null);
 
   // Suggested starter prompts
   const suggestions = [
@@ -28,7 +28,7 @@ export default function GeminiChat() {
     },
     {
       label: "Foco vs Multi-SaaS",
-      prompt: "Estou me sentindo tentado a criar um ERP, um CRM e um produto de IA simultaneamente. Como posso manter o foco obsessivo em apenas um MVP de SaaS IoT para gerar receita recorrente real?"
+      prompt: "Estou me sentindo tentado a criar um ERP, um CRM e um produto de IA simultaneamente. Como posso manter o foco obsessivo en apenas um MVP de SaaS IoT para gerar receita recorrente real?"
     },
     {
       label: "Lista de Materiais ESP32 B2B",
@@ -53,7 +53,12 @@ export default function GeminiChat() {
   }, []);
 
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    if (chatContainerRef.current) {
+      chatContainerRef.current.scrollTo({
+        top: chatContainerRef.current.scrollHeight,
+        behavior: "smooth"
+      });
+    }
   }, [messages, loading]);
 
   const handleSendMessage = async (textToSend: string) => {
@@ -151,7 +156,7 @@ export default function GeminiChat() {
       </div>
 
       {/* Messages Scroll Area */}
-      <div className="flex-1 overflow-y-auto p-4 space-y-4 scrollbar-none bg-slate-950/20">
+      <div ref={chatContainerRef} className="flex-1 overflow-y-auto p-4 space-y-4 scrollbar-none bg-slate-950/20">
         
         {messages.map((m) => (
           <div 
@@ -205,8 +210,6 @@ export default function GeminiChat() {
             </div>
           </div>
         )}
-
-        <div ref={messagesEndRef} />
       </div>
 
       {/* Suggested Starters and Input controls wrapper */}
